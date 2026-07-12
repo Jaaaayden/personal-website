@@ -1,0 +1,109 @@
+.main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.5rem) 8rem;
+}
+
+.hero {
+  padding: 5rem 0 3rem;
+}
+
+.heroName {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.02em;
+}
+
+.heroTagline {
+  margin: 0.5rem 0 0;
+  font-size: 1.05rem;
+}
+
+.heroAbout {
+  margin-top: 1.75rem;
+  max-width: 640px;
+}
+
+.heroAbout p {
+  margin: 0 0 0.8rem;
+  /* brighter than text-dim so the bio reads comfortably, still softer than headings */
+  color: color-mix(in srgb, var(--text) 78%, var(--text-dim));
+  line-height: 1.7;
+}
+
+/* Lead line ("CS student @ UCLA") pops. */
+.heroAbout p:first-child {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+
+.heroAbout p:last-child {
+  margin-bottom: 0;
+}
+
+/* bruinwalk.com in the Bruinwalk blue, as a gradient. */
+.bioBruinwalk {
+  background: linear-gradient(90deg, #2774ae, #7fa8e0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 600;
+}
+
+.bioBruinwalk:hover {
+  /* the text is transparent, so the default underline would be invisible */
+  text-decoration: none;
+  filter: brightness(1.2);
+}
+
+/* UCLA gold for the Department of Economics. */
+.bioGold {
+  color: #ffd100;
+  font-weight: 600;
+}
+
+:global(html[data-theme="light"]) .bioGold {
+  /* bright gold vanishes on cream — use a deeper gold in light mode */
+  color: #b8860b;
+}
+
+/* Smaller bold aside, e.g. the "reach out" call-to-action line. */
+.heroAbout p.bioNote {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* ALWAYS. */
+.bioAlways {
+  color: var(--accent);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fold {
+  display: flex;
+  flex-direction: column;
+  /* Exactly one viewport of content up top (56px = sticky nav), so the games
+     hint sits visible at the bottom edge on landing while the arcade (3rem
+     further down) stays hidden. svh scales with zoom, so this holds at 67%,
+     100%, etc. */
+  min-height: calc(100svh - 56px);
+}
+
+.gamesHint {
+  margin-top: auto;
+  padding: 5rem 0 3.5rem;
+  text-align: center;
+}
+
+.gamesHintLink {
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.gamesHintLink:hover {
+  color: var(--text);
+  text-decoration: none;
+}

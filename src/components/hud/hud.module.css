@@ -1,0 +1,21 @@
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.points {
+  color: var(--accent);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.lifetime {
+  font-size: 0.72rem;
+}

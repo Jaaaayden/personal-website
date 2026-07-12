@@ -1,0 +1,309 @@
+.section {
+  min-height: 40vh;
+}
+
+.subheading {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin: 0 0 0.6rem;
+}
+
+/* ---- pinned projects ---- */
+.projectsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  color: inherit;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.projectCard:hover {
+  text-decoration: none;
+  border-color: var(--text-dim);
+  background: var(--bg-hover);
+}
+
+.projectHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.projectIcon {
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.projectName {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.projectCard:hover .projectName {
+  text-decoration: underline;
+}
+
+.projectChip {
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0 0.5rem;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.projectDesc {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.projectFooter {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+.projectTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.projectDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Empty slot awaiting a real project. */
+.projectEmpty {
+  border-style: dashed;
+  opacity: 0.55;
+}
+
+.projectEmpty .projectName {
+  color: var(--text-dim);
+}
+
+/* ---- spotify embeds ---- */
+.songGridWrap {
+  position: relative;
+  min-height: 152px;
+}
+
+.songLoading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  animation: songLoadingPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes songLoadingPulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Hidden (but laid out, so the iframes still load) until every embed is in. */
+.songGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  align-items: start;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.songGridReady {
+  opacity: 1;
+}
+
+.embedLabel {
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 0.35rem;
+}
+
+/* ---- photo gallery ---- */
+.galleryStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.galleryGrid {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-start;
+}
+
+/* Justified row: shares proportional to aspect ratio give equal heights. */
+.galleryGrid > .galleryItem {
+  flex: var(--tile-ratio, 1) 1 0%;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .galleryGrid {
+    flex-wrap: wrap;
+  }
+  .galleryGrid > .galleryItem {
+    flex-basis: calc(var(--tile-ratio, 1) * 140px);
+  }
+}
+
+.galleryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.galleryItem:hover {
+  text-decoration: none;
+}
+
+.galleryTile {
+  position: relative;
+  display: block;
+  /* each item overrides aspect-ratio inline with its image's native shape */
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+a.galleryItem:hover .galleryTile {
+  border-color: var(--text-dim);
+}
+
+.galleryImg {
+  /* tile shape matches the image's ratio, so this never actually crops */
+  object-fit: cover;
+}
+
+.galleryCaption {
+  font-size: 0.75rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  /* wrap at the tile's width without stretching the item to fit the text */
+  width: 0;
+  min-width: 100%;
+}
+
+/* ---- draggable photo track (good eats / cool places) ---- */
+.trackViewport {
+  overflow: hidden;
+  cursor: grab;
+  /* horizontal drags belong to the track; keep vertical page scroll native */
+  touch-action: pan-y;
+}
+
+.trackViewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  gap: 0.8rem;
+  width: max-content;
+  user-select: none;
+}
+
+.trackItem {
+  width: clamp(150px, 24vmin, 210px);
+  flex-shrink: 0;
+}
+
+/* Landscape shots opt in via `wide`; same height as the 5/7 tiles, but a
+   touch narrower than the photo so the drag parallax still pans. */
+.trackItemWide {
+  width: clamp(240px, 38.4vmin, 336px);
+}
+
+.trackItemWide .trackTile {
+  aspect-ratio: 8 / 7;
+}
+
+.trackTile {
+  position: relative;
+  display: block;
+  aspect-ratio: 5 / 7;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+a.trackItem:hover .trackTile {
+  border-color: var(--text-dim);
+}
+
+.trackImg {
+  object-fit: cover;
+  /* parallax rest position; the drag animates this toward 0% */
+  object-position: 100% center;
+  pointer-events: none;
+}
+
+/* Empty slot awaiting a photo. */
+.galleryEmpty {
+  border-style: dashed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  opacity: 0.55;
+}
+
+/* Each frame also fades itself in, for cards that arrive after the reveal
+   (the live now-playing cell). */
+.embedFrame {
+  display: block;
+  border: 0;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.embedLoaded {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .projectsGrid,
+  .songGrid {
+    grid-template-columns: 1fr;
+  }
+}

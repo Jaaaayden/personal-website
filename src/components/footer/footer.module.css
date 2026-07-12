@@ -1,0 +1,42 @@
+.footer {
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  /* Text sits ~7px above the band's vertical center: less top padding, more
+     bottom padding, keeping the footer height ~80px. */
+  padding: 21px clamp(1rem, 4vw, 2.5rem) 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.9rem;
+}
+
+.contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.link {
+  color: var(--text-dim);
+}
+
+.link:hover {
+  color: var(--accent);
+}
+
+/* keep clear of the fixed desk in the bottom-left corner */
+@media (min-width: 769px) {
+  .inner {
+    padding-left: max(
+      clamp(1rem, 4vw, 2.5rem),
+      calc(250px - (100vw - 1080px) / 2)
+    );
+  }
+}

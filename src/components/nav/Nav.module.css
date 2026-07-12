@@ -1,0 +1,140 @@
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--nav-glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+
+.inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.wordmark {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.wordmark:hover {
+  text-decoration: none;
+  color: var(--accent);
+}
+
+/* One inline text run: every label and dot sits in the same line box, so
+   they share a single baseline that device-pixel snapping moves as a unit —
+   individual items can never drift by a pixel at fractional zoom/scaling. */
+.tabs {
+  flex: 1;
+  white-space: nowrap;
+  line-height: 1;
+  font-size: 0.78rem;
+}
+
+.dot {
+  color: var(--text-dim);
+  opacity: 0.5;
+  padding: 0 0.28rem;
+  user-select: none;
+}
+
+.tab {
+  display: inline;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.tab:focus {
+  outline: none;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* SVG arrow instead of the ↗ character — the glyph came from a fallback
+   font whose taller metrics inflated the line box and shifted the baseline */
+.ext {
+  display: inline-block;
+  vertical-align: baseline;
+  margin-left: 0.3rem;
+  opacity: 0.75;
+}
+
+.tab:hover {
+  color: var(--text);
+  background: var(--bg-hover);
+  text-decoration: none;
+}
+
+.tabActive {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.iconLink {
+  color: var(--text-dim);
+  display: inline-flex;
+  transition: color 0.15s;
+}
+
+.iconLink:hover {
+  color: var(--text);
+}
+
+.themeToggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.themeToggle:hover {
+  color: var(--text);
+  background: var(--bg-hover);
+}
+
+@media (max-width: 640px) {
+  .inner {
+    gap: 0.75rem;
+  }
+  .wordmark {
+    display: none;
+  }
+}
