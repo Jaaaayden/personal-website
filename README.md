@@ -1,11 +1,11 @@
 # Jayden Le — personal website
 
-Simple portfolio site with a couple games to play :D
+jaydenle.com - Simple portfolio site with a couple games to play :D
 
 Next.js 16 (App Router) + TypeScript, Zustand for client state,
 plain CSS Modules, and Vitest
 
-## Getting started
+## Getting started (if you for some reason want to host locally)
 
 ```bash
 npm install
