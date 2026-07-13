@@ -57,8 +57,11 @@ export async function POST(request: Request) {
     );
   }
 
+  // Last hop only: that entry is appended by our own proxy, while earlier
+  // ones arrive client-supplied and would let a sender rotate rate buckets.
   const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "local";
+    request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
+    "local";
   if (isRateLimited(ip)) {
     return Response.json(
       { error: "whoa, slow down — try again in a few minutes" },
