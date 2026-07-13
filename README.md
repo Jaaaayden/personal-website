@@ -35,3 +35,10 @@ All optional — no crashes w/ missing google doc for resume/etc
 | `npm test` | Run the Vitest suite once (game engines have a bot-vs-bot fuzz suite) |
 | `npm run test:watch` | Vitest in watch mode |
 | `npm run lint` | ESLint |
+
+## Deployment
+
+Self-hosted with Docker Compose (Caddy + Next.js standalone), auto-deployed
+to a VPS by GitHub Actions on push to `main`. Locally:
+`docker compose up -d --build` → <http://localhost>. Full runbook:
+[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).

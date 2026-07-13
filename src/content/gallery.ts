@@ -25,84 +25,84 @@ export interface GalleryItem {
 
 export const GALLERY: GalleryItem[] = [
   // good eats
-  { src: "/gallery/feast.png", caption: "feast's first day open as a dining hall (again) :D", tag: "food" },
-  { src: "/gallery/w-bplate.png", caption: "best mashed i've ever had - ty bplate", tag: "food" },
-  { src: "/gallery/gobbled.png", caption: "12 minutes to eat that last pic btw", tag: "food" },
+  { src: "/gallery/feast.webp", caption: "feast's first day open as a dining hall (again) :D", tag: "food" },
+  { src: "/gallery/w-bplate.webp", caption: "best mashed i've ever had - ty bplate", tag: "food" },
+  { src: "/gallery/gobbled.webp", caption: "12 minutes to eat that last pic btw", tag: "food" },
   {
-    src: "/gallery/ackerman-cf.png",
+    src: "/gallery/ackerman-cf.webp",
     caption: "sooo good",
     tag: "food",
   },
   {
-    src: "/gallery/century-city-haidilao.png",
+    src: "/gallery/century-city-haidilao.webp",
     caption: "haidilao run during finals week",
     tag: "food",
   },
   {
-    src: "/gallery/san-diego-haidilao.png",
+    src: "/gallery/san-diego-haidilao.webp",
     caption: "more haidilao but receipt edition",
     tag: "food",
   },
   {
-    src: "/gallery/sf-somewhere.png",
+    src: "/gallery/sf-somewhere.webp",
     caption: "might not have won cal hacks but ate good",
     tag: "food",
   },
-  { src: "/gallery/izakaya-kopan.png", caption: "ty jose for treating bruinwalk to the best westwood food", tag: "food" },
-  { src: "/gallery/joes.png", caption: "joe's ny slice was worth the line", tag: "food" },
-  { src: "/gallery/smile.png", caption: "oh how i'll miss you food trucks", tag: "food" },
-  { src: "/gallery/pasta.png", caption: "'the method' - landon", tag: "food" },
+  { src: "/gallery/izakaya-kopan.webp", caption: "ty jose for treating bruinwalk to the best westwood food", tag: "food" },
+  { src: "/gallery/joes.webp", caption: "joe's ny slice was worth the line", tag: "food" },
+  { src: "/gallery/smile.webp", caption: "oh how i'll miss you food trucks", tag: "food" },
+  { src: "/gallery/pasta.webp", caption: "'the method' - landon", tag: "food" },
   {
-    src: "/gallery/simple-beef-fried-rice.png",
+    src: "/gallery/simple-beef-fried-rice.webp",
     caption: "i love fried rice",
     tag: "food",
   },
   {
-    src: "/gallery/good-ol-dennys.png",
+    src: "/gallery/good-ol-dennys.webp",
     caption: "but regardless of whether it's a nice restaurant or a denny's, food only hits when you got good company",
     tag: "food",
   },
 
   // cool places
-  { src: "/gallery/central-park.png", caption: "central park", tag: "places" },
+  { src: "/gallery/central-park.webp", caption: "central park", tag: "places" },
   {
-    src: "/gallery/statue-of-liberty.png",
+    src: "/gallery/statue-of-liberty.webp",
     caption: "statue of liberty",
     tag: "places",
   },
-  { src: "/gallery/uss-growler.png", caption: "uss growler", tag: "places" },
+  { src: "/gallery/uss-growler.webp", caption: "uss growler", tag: "places" },
   {
-    src: "/gallery/palace-of-fine-arts.png",
+    src: "/gallery/palace-of-fine-arts.webp",
     caption: "palace of fine arts",
     tag: "places",
   },
   {
-    src: "/gallery/blurry-but-nice.png",
+    src: "/gallery/blurry-but-nice.webp",
     caption: "blurry but i thought it still looked cool",
     tag: "places",
   },
-  { src: "/gallery/retreat.png", caption: "ai safety retreat", tag: "places" },
+  { src: "/gallery/retreat.webp", caption: "ai safety retreat", tag: "places" },
   {
-    src: "/gallery/peace.png",
+    src: "/gallery/peace.webp",
     caption: "imagine waking up to that view",
     tag: "places",
     wide: true,
   },
   {
-    src: "/gallery/just-a-rubber-duck.png",
+    src: "/gallery/just-a-rubber-duck.webp",
     caption: "not really a place but oh wow big rubber duck",
     tag: "places",
   },
 
   // random achievements
   {
-    src: "/gallery/number-1-in-2020.png",
+    src: "/gallery/number-1-in-2020.webp",
     caption: "might be too washed to hit top 500 nowadays but 12 y/o me was good at brawl stars </3",
     tag: "achievements",
     aspect: "2436 / 1125",
   },
   {
-    src: "/gallery/chess-pb.png",
+    src: "/gallery/chess-pb.webp",
     caption: "not really a flex but need to post it here to motivate me to hit 40",
     tag: "achievements",
     // window from "New Record!" through the puzzle grid — no status bar,
@@ -111,7 +111,7 @@ export const GALLERY: GalleryItem[] = [
     focus: "center 14%",
   },
   {
-    src: "/gallery/tuyu-77.png",
+    src: "/gallery/tuyu-77.webp",
     caption: "#77 tuyu listener worldwide",
     tag: "achievements",
     aspect: "1080 / 1920",

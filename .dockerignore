@@ -1,0 +1,29 @@
+# deps + build output (rebuilt inside the image; a stale Windows .next must
+# never leak into the Linux image)
+node_modules
+.next
+
+# secrets — never bake env into the image
+.env*
+!.env.example
+
+# vcs / ci / editor / agent
+.git
+.github
+.gitignore
+.gitattributes
+.vscode
+.claude
+
+# docker files themselves
+Dockerfile
+.dockerignore
+docker-compose*.yml
+Caddyfile
+
+# docs & misc
+docs
+*.md
+coverage
+playwright-report
+test-results

@@ -1,0 +1,38 @@
+services:
+  app:
+    # One file, two modes:
+    #   local: docker compose up -d --build            (builds from source)
+    #   VPS:   docker compose pull app && docker compose up -d --no-build
+    image: ghcr.io/jaaaayden/personal-website:latest
+    build: .
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false # all vars optional; works before .env exists
+    expose:
+      - "3000" # reachable by caddy on the compose network only
+    # Deliberately no `ports:` — Caddy is the only public entrypoint.
+    # Do not scale beyond 1 replica: /api/contact rate-limiting is in-memory.
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # HTTP/3
+    environment:
+      # Read from .env (or shell); defaults to plain-HTTP localhost for dev.
+      # On the VPS set SITE_ADDRESS=yourdomain.com for automatic HTTPS.
+      SITE_ADDRESS: ${SITE_ADDRESS:-http://localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data # certificates persist across restarts
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

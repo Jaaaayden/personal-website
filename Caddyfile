@@ -1,0 +1,12 @@
+# SITE_ADDRESS is injected by docker-compose:
+#   local (default):  http://localhost   -> plain HTTP on port 80, no certs
+#   VPS:              yourdomain.com     -> Caddy provisions Let's Encrypt
+#                                           certificates automatically
+{$SITE_ADDRESS:http://localhost} {
+	encode zstd gzip
+
+	reverse_proxy app:3000 {
+		# Don't buffer responses — Next.js streams HTML/RSC payloads.
+		flush_interval -1
+	}
+}
