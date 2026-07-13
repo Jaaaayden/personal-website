@@ -1,6 +1,6 @@
 # Jayden Le — personal website
 
-jaydenle.com - Simple portfolio site with a couple games to play :D
+[jaydenle.com](jaydenle.com) - Simple portfolio site with a couple games to play :D
 
 Next.js 16 (App Router) + TypeScript, Zustand for client state,
 plain CSS Modules, and Vitest
