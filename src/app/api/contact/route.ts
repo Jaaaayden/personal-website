@@ -81,8 +81,10 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       // Resend's shared onboarding sender works without a verified domain as
-      // long as CONTACT_TO is the account's own email.
-      from: process.env.CONTACT_FROM ?? "Secret Page <onboarding@resend.dev>",
+      // long as CONTACT_TO is the account's own email. `||` not `??`: an env
+      // template can leave CONTACT_FROM as an empty string, which must also
+      // fall back.
+      from: process.env.CONTACT_FROM || "Secret Page <onboarding@resend.dev>",
       to: [process.env.CONTACT_TO],
       reply_to: fields.email,
       subject: `[secret page] ${fields.subject}`,
