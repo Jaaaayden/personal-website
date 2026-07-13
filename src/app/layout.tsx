@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Jayden Le",
   description:
-    "Jayden Le's corner of the internet — work, achievements, and an arcade of bots to beat.",
+    "just a place for me to yap about random stuff",
 };
 
 export default function RootLayout({

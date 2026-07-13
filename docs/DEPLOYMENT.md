@@ -91,6 +91,17 @@ builds, it only pulls images).
    sudo ufw enable
    ```
 
+3.5 **Swap file (recommended on 1 GB RAM):** turns a future memory spike
+   from "OOM-killed container" into "briefly slower":
+
+   ```bash
+   sudo fallocate -l 1G /swapfile
+   sudo chmod 600 /swapfile
+   sudo mkswap /swapfile
+   sudo swapon /swapfile
+   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab   # survive reboots
+   ```
+
 4. **DNS:** add an A record for `yourdomain.com` → the VPS IP (and
    optionally `www`). Do this **before** the first `compose up` — Caddy
    requests a certificate on startup, and issuance fails until DNS resolves
