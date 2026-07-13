@@ -144,6 +144,11 @@ export default function CosmeticsEffects() {
       style={{
         position: "fixed",
         inset: 0,
+        // Display at viewport size; the backing store is scaled by
+        // devicePixelRatio in resize(), so without this the canvas element
+        // itself would render DPR× larger than the screen.
+        width: "100%",
+        height: "100%",
         pointerEvents: "none",
         zIndex: 200,
       }}
