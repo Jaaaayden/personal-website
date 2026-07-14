@@ -4,7 +4,15 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      # One weekly PR for all safe npm bumps; majors stay individual PRs
+      # since they can contain breaking changes worth reviewing alone.
+      npm-minor-and-patch:
+        update-types: ["minor", "patch"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions-all:
+        patterns: ["*"]

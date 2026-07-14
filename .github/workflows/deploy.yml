@@ -8,8 +8,10 @@ on:
   pull_request:
     branches: [main]
 
+# Per-ref: each PR gets its own group (new pushes cancel that PR's stale
+# run), and main's deploys never collide with PR runs.
 concurrency:
-  group: deploy
+  group: deploy-${{ github.ref }}
   cancel-in-progress: true
 
 env:
