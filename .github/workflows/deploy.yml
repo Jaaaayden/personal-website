@@ -3,6 +3,10 @@ name: Deploy
 on:
   push:
     branches: [main]
+  # PRs (incl. dependabot's) get the test job as a pre-merge check; the
+  # build-and-push + deploy jobs are push-to-main only (see their `if:`).
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: deploy
@@ -27,6 +31,7 @@ jobs:
 
   build-and-push:
     needs: test
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,6 +58,7 @@ jobs:
   # Setup runbook: docs/DEPLOYMENT.md
   deploy:
     needs: build-and-push
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1
