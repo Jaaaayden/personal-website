@@ -30,6 +30,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+      # Prove the site compiles (type-checks + bundles) before merge/deploy;
+      # without this a PR can be green yet break the image build on main.
+      - run: npm run build
 
   build-and-push:
     needs: test
