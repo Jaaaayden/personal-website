@@ -414,19 +414,33 @@
   gap: 0.75rem;
 }
 
+/* Holds the tuck-under-the-felt offset so .tlHandFan's own padding stays
+   inside the scroll container's clip box on mobile. */
+.tlHandScroll {
+  display: flex;
+  width: 100%;
+  margin-top: -1.9rem;
+  z-index: 2;
+}
+
 /* your hand, fanned like you're holding it */
 .tlHandFan {
   display: flex;
   justify-content: center;
-  margin-top: -1.9rem;
+  /* auto margins center it, and collapse to 0 once it overflows, so the
+     scroll starts on the lowest card (the one the opening lead must use) */
+  margin-inline: auto;
+  flex: 0 0 auto;
   padding: 1.2rem 0 0.4rem;
-  z-index: 2;
 }
 
 .tlFanSlot {
   display: inline-block;
   margin-left: -20px;
   transform-origin: 50% 340%;
+  transform: rotate(
+    calc(var(--tl-fan-i, 0) * var(--tl-fan-step, 0deg) * var(--tl-fan-scale, 1))
+  );
 }
 
 .tlFanSlot:first-child {
@@ -488,8 +502,25 @@
 }
 
 @media (max-width: 640px) {
+  /* A 13-card fan renders ~570px wide — wider than any phone — so let it
+     scroll instead of stranding the low cards off-screen. */
+  .tlHandScroll {
+    margin-top: -1.2rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .tlHandScroll::-webkit-scrollbar {
+    display: none;
+  }
+  .tlHandFan {
+    /* the clip box is .tlHandScroll's padding box, so this padding is what
+       keeps the splayed edge cards and the raised selection from being cut */
+    padding: 1.9rem 3.2rem 0.6rem;
+    --tl-fan-scale: 0.35;
+  }
   .tlFanSlot {
-    margin-left: -16px;
+    margin-left: -13px;
   }
   .tlFelt {
     padding: 1.25rem 1rem 2.6rem;

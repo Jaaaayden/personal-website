@@ -237,22 +237,29 @@ export default function TienLenBoard() {
           </span>
         </div>
 
-        {/* your hand, held first-person */}
+        {/* your hand, held first-person. The fan splays wider than a phone
+            screen, so the wrapper scrolls sideways there (see games.module.css,
+            which also flattens the fan via --tl-fan-scale). */}
         {!roundDone && (
-          <div className={styles.tlHandFan}>
-            {hand.map((card, i) => (
-              <span
-                key={card.id}
-                className={styles.tlFanSlot}
-                style={{ transform: `rotate(${(i - handMid) * fanStep}deg)` }}
-              >
-                <PlayingCard
-                  card={card}
-                  selected={selected.has(card.id)}
-                  onClick={() => toggleCard(card.id)}
-                />
-              </span>
-            ))}
+          <div className={styles.tlHandScroll}>
+            <div
+              className={styles.tlHandFan}
+              style={{ "--tl-fan-step": `${fanStep}deg` } as React.CSSProperties}
+            >
+              {hand.map((card, i) => (
+                <span
+                  key={card.id}
+                  className={styles.tlFanSlot}
+                  style={{ "--tl-fan-i": i - handMid } as React.CSSProperties}
+                >
+                  <PlayingCard
+                    card={card}
+                    selected={selected.has(card.id)}
+                    onClick={() => toggleCard(card.id)}
+                  />
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </div>

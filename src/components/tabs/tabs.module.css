@@ -215,11 +215,8 @@ a.galleryItem:hover .galleryTile {
 
 .galleryCaption {
   font-size: 0.75rem;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 4;
-  /* wrap at the tile's width without stretching the item to fit the text */
+  /* wrap at the tile's width without stretching the item to fit the text —
+     no line clamp, or long captions get cut off on narrow mobile tiles */
   width: 0;
   min-width: 100%;
 }
