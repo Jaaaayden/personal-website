@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
   {
     name: "K-12 Food Procurement",
     description: "Helping 100+ school districts in California stop overpaying for identical food products.",
-    url: "https://schoolfoodlab.vercel.app/",
+    url: "https://schoolfoodlab.org",
     tags: ["Python", "Supabase"],
   },
   {
