@@ -57,6 +57,12 @@ export const GALLERY: GalleryItem[] = [
     caption: "i love fried rice",
     tag: "food",
   },
+  { src: "/gallery/first-time-steak.webp", caption: "first time steak", tag: "food" },
+  {
+    src: "/gallery/pancake-house-omelette.webp",
+    caption: "pancake house omelette chef's kiss",
+    tag: "food",
+  },
   {
     src: "/gallery/good-ol-dennys.webp",
     caption: "but regardless of whether it's a nice restaurant or a denny's, food only hits when you got good company",
@@ -115,5 +121,11 @@ export const GALLERY: GalleryItem[] = [
     caption: "#77 tuyu listener worldwide",
     tag: "achievements",
     aspect: "1080 / 1920",
+  },
+  {
+    src: "/gallery/puzzles-2k.webp",
+    caption: "9/23/26 2K puzzles!",
+    tag: "achievements",
+    aspect: "1284 / 1213",
   },
 ];
