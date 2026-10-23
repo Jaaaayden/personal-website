@@ -7,6 +7,7 @@ export const LANGUAGE_COLORS = {
   PostgreSQL: "#336791",
   MongoDB: "#47a248",
   Supabase: "#3ecf8e",
+  SQLite: "#0f80cc",
 } as const;
 
 export interface Project {
@@ -29,6 +30,12 @@ export const PROJECTS: Project[] = [
     description: "Helping 100+ school districts in California stop overpaying for identical food products.",
     url: "https://schoolfoodlab.org",
     tags: ["Python", "Supabase"],
+  },
+  {
+    name: "PokerNow Tracker",
+    description: "Live PokerNow HUD that tracks every decision as it happens, reveals what your opponent has shown up with in this exact spot, and more!",
+    url: "https://github.com/Jaaaayden/pokernow-tracker",
+    tags: ["Python", "JavaScript", "SQLite"],
   },
   {
     name: "Hobbify",
