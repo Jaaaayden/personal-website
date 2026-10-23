@@ -93,9 +93,29 @@ async function apiGet(url: string, token: string): Promise<Response> {
   });
 }
 
-export async function getNowPlaying(): Promise<NowPlayingPayload> {
-  if (!isConfigured()) return { status: "off" };
+/** Every open tab polls, and nothing in front of the app caches responses,
+ *  so share one lookup per window. Caching the promise (not the result) also
+ *  folds concurrent requests into a single upstream call. */
+const NOW_PLAYING_TTL_MS = 25_000;
+let nowPlayingCache: {
+  payload: Promise<NowPlayingPayload>;
+  expiresAt: number;
+} | null = null;
 
+export function getNowPlaying(): Promise<NowPlayingPayload> {
+  if (!isConfigured()) return Promise.resolve({ status: "off" });
+
+  if (!nowPlayingCache || nowPlayingCache.expiresAt <= Date.now()) {
+    // fetchNowPlaying never rejects, so a cached promise can't poison the cache.
+    nowPlayingCache = {
+      payload: fetchNowPlaying(),
+      expiresAt: Date.now() + NOW_PLAYING_TTL_MS,
+    };
+  }
+  return nowPlayingCache.payload;
+}
+
+async function fetchNowPlaying(): Promise<NowPlayingPayload> {
   try {
     let token = await getAccessToken();
 

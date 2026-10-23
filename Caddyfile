@@ -13,6 +13,10 @@
 		X-Frame-Options "DENY"
 		Referrer-Policy "strict-origin-when-cross-origin"
 		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		# No script-src on purpose: Next's inline scripts would need per-request
+		# nonces, which forces every page to render dynamically. This still
+		# limits framing, plugins, <base> hijacks, and where forms can post.
+		Content-Security-Policy "frame-ancestors 'none'; frame-src https://open.spotify.com; object-src 'none'; base-uri 'self'; form-action 'self'"
 		-Server
 	}
 
