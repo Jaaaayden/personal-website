@@ -12,7 +12,10 @@ services:
     expose:
       - "3000" # reachable by caddy on the compose network only
     # Deliberately no `ports:` — Caddy is the only public entrypoint.
-    # Do not scale beyond 1 replica: /api/contact rate-limiting is in-memory.
+    # Do not scale beyond 1 replica: /api/contact rate-limiting is in-memory,
+    # and the secret-page visitor count is a single JSON file.
+    volumes:
+      - app_data:/app/data # secret-page visitor count persists across deploys
 
   caddy:
     image: caddy:2-alpine
@@ -34,5 +37,6 @@ services:
       - caddy_config:/config
 
 volumes:
+  app_data:
   caddy_data:
   caddy_config:

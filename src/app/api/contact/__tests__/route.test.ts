@@ -44,6 +44,20 @@ describe("contact route validation", () => {
     expect(res.status).toBe(400);
   });
 
+  it("rejects valid JSON that isn't an object", async () => {
+    const { POST } = await loadRoute();
+    expect((await POST(post("null"))).status).toBe(400);
+    expect((await POST(post("[]"))).status).toBe(400);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-JSON content types so other sites can't post cross-origin", async () => {
+    const { POST } = await loadRoute();
+    const res = await POST(post(validBody, { "Content-Type": "text/plain" }));
+    expect(res.status).toBe(415);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
   it("rejects a missing field", async () => {
     const { POST } = await loadRoute();
     // JSON.stringify drops undefined keys, so `message` is truly absent.

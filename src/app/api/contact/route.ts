@@ -1,36 +1,21 @@
+import { readJsonObject } from "@/lib/jsonBody";
+import { clientIp, createRateLimiter } from "@/lib/rateLimit";
+
 const RESEND_URL = "https://api.resend.com/emails";
 
 /* Field caps keep the email readable and stop 10MB payload abuse. */
 const LIMITS = { name: 100, email: 200, subject: 150, message: 5000 } as const;
 
-/** Per-IP send times, kept per warm server instance (same trade-off as the
- *  Spotify token cache — a restart forgets, and that's fine for a guestbook). */
-const recentSends = new Map<string, number[]>();
-const RATE_WINDOW_MS = 10 * 60_000;
-const RATE_MAX = 5;
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const times = (recentSends.get(ip) ?? []).filter(
-    (t) => now - t < RATE_WINDOW_MS
-  );
-  if (times.length >= RATE_MAX) return true;
-  times.push(now);
-  recentSends.set(ip, times);
-  return false;
-}
+/** 5 sends per IP per 10 minutes. */
+const isRateLimited = createRateLimiter(10 * 60_000, 5);
 
 function isConfigured(): boolean {
   return Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_TO);
 }
 
 export async function POST(request: Request) {
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return Response.json({ error: "invalid request" }, { status: 400 });
-  }
+  const body = await readJsonObject(request);
+  if (body instanceof Response) return body;
 
   // Honeypot: real visitors never see this field. Report success so bots
   // don't learn they were caught.
@@ -57,12 +42,7 @@ export async function POST(request: Request) {
     );
   }
 
-  // Last hop only: that entry is appended by our own proxy, while earlier
-  // ones arrive client-supplied and would let a sender rotate rate buckets.
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
-    "local";
-  if (isRateLimited(ip)) {
+  if (isRateLimited(clientIp(request))) {
     return Response.json(
       { error: "whoa, slow down — try again in a few minutes" },
       { status: 429 }

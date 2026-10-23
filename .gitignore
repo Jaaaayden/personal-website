@@ -18,6 +18,9 @@
 # production
 /build
 
+# runtime data (secret-page visitor count in dev)
+/data
+
 # misc
 .DS_Store
 *.pem

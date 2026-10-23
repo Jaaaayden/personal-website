@@ -3,6 +3,9 @@
 node_modules
 .next
 
+# local runtime data — the container gets its own on the app_data volume
+data
+
 # secrets — never bake env into the image
 .env*
 !.env.example

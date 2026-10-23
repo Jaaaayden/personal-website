@@ -22,7 +22,12 @@ WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     HOSTNAME=0.0.0.0 \
-    PORT=3000
+    PORT=3000 \
+    DATA_DIR=/app/data
+
+# Mount point for the app_data volume (secret-page visitor count). Created
+# here so a fresh named volume inherits node ownership and stays writable.
+RUN mkdir -p /app/data && chown node:node /app/data
 
 # The standalone bundle contains server.js plus a pruned node_modules
 # (including sharp's linux-musl build, traced automatically by next build).

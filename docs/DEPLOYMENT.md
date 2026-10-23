@@ -40,8 +40,13 @@ If port 80 or 443 is already taken on your machine, change the mapping in
 - The ISR/data cache (`/app/.next/cache`, e.g. the 1-hour resume-PDF cache)
   is ephemeral by design: losing it on redeploy costs one Google Docs fetch,
   and a persistent volume could serve stale content across deploys.
+- The secret-page visitor count is the one piece of state that *does*
+  persist: `/app/data/secret-visitors.json` on the `app_data` named volume
+  (`DATA_DIR` in the Dockerfile). It survives redeploys; only
+  `docker compose down -v` wipes it.
 - Run exactly **one** app replica: `/api/contact` rate-limiting is an
-  in-memory `Map`, and the cache above is per-instance local disk.
+  in-memory `Map`, the visitor count is a single file, and the cache above
+  is per-instance local disk.
 
 ## Caddy and `SITE_ADDRESS`
 
@@ -178,4 +183,9 @@ docker compose ps                # health status
 docker compose logs -f app      # app logs (or `caddy`)
 docker compose up -d             # apply compose/Caddyfile edits after git pull
 docker system df                 # disk usage; CI already prunes old images
+
+# secret-page visitor count
+docker compose exec app cat /app/data/secret-visitors.json         # inspect
+docker compose cp app:/app/data/secret-visitors.json ./backup.json # back up
+docker compose exec app rm /app/data/secret-visitors.json && docker compose restart app  # reset
 ```
