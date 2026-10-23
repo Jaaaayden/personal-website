@@ -16,3 +16,8 @@ updates:
     groups:
       actions-all:
         patterns: ["*"]
+  # Dockerfile base images (node:22-alpine).
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly

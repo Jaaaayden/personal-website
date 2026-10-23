@@ -9,10 +9,15 @@ on:
     branches: [main]
 
 # Per-ref: each PR gets its own group (new pushes cancel that PR's stale
-# run), and main's deploys never collide with PR runs.
+# run), and main's deploys never collide with PR runs. Main runs queue
+# instead of cancelling, so a quick second push can't kill a deploy midway.
 concurrency:
   group: deploy-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Least privilege by default; build-and-push adds packages: write.
+permissions:
+  contents: read
 
 env:
   # GHCR image names must be lowercase; must match docker-compose.yml.
@@ -75,6 +80,7 @@ jobs:
             set -e
             cd /opt/personal-website
             git pull --ff-only
-            docker compose pull app
+            # All services, not just app, so Caddy picks up its updates too.
+            docker compose pull
             docker compose up -d --no-build
             docker image prune -f
