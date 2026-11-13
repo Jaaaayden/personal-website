@@ -1,76 +1,48 @@
 import styles from "./games.module.css";
 
-/** Beginner-friendly rules panel shown in place of the Tien Len board. */
+/** Short rules panel shown in place of the Tien Len board. */
 export default function TienLenRules({ onBack }: { onBack: () => void }) {
   return (
     <div className={styles.tlRules}>
-      <h4 className={styles.tlRulesHeading}>the goal</h4>
+      <h4 className={styles.tlRulesHeading}>goal</h4>
       <ul className={styles.tlRulesList}>
-        <li>
-          be the first to play every card in your hand. winning pays 60 ◆ plus
-          3 ◆ for each card robo-jayden is still holding.
-        </li>
+        <li>empty your hand first. win = 60 ◆ + 3 ◆ per card robo-jayden holds.</li>
       </ul>
 
       <h4 className={styles.tlRulesHeading}>card order</h4>
       <ul className={styles.tlRulesList}>
         <li>
-          ranks run 3, 4, 5, … 10, J, Q, K, A, 2 — yes,{" "}
-          <strong>2 is the highest card</strong>.
+          3 → 10 → J Q K A → <strong>2 (highest)</strong>
+        </li>
+        <li>ties break by suit: ♠ &lt; ♣ &lt; ♦ &lt; ♥ (3♠ lowest, 2♥ highest)</li>
+      </ul>
+
+      <h4 className={styles.tlRulesHeading}>combos</h4>
+      <ul className={styles.tlRulesList}>
+        <li>single, pair, triple, four of a kind</li>
+        <li>run: 3+ in a row, e.g. 4-5-6</li>
+        <li>pair run: 3+ pairs in a row, e.g. 55-66-77</li>
+        <li>no 2s in runs</li>
+      </ul>
+
+      <h4 className={styles.tlRulesHeading}>turns</h4>
+      <ul className={styles.tlRulesList}>
+        <li>first play must include the lowest card dealt.</li>
+        <li>
+          beat the table with the <strong>same combo, same size, higher top
+          card</strong>: pair beats pair, 5-run beats 5-run.
         </li>
         <li>
-          rank ties break by suit, low to high: ♠ spades, ♣ clubs, ♦ diamonds,
-          ♥ hearts. so 3♠ is the lowest card in the deck and 2♥ is the highest.
+          pass = you&rsquo;re out until the table clears. last player standing
+          leads anything.
         </li>
       </ul>
 
-      <h4 className={styles.tlRulesHeading}>what you can play</h4>
+      <h4 className={styles.tlRulesHeading}>bombs (beat 2s)</h4>
       <ul className={styles.tlRulesList}>
-        <li>single — any one card</li>
-        <li>pair — two cards of the same rank</li>
-        <li>triple — three of the same rank</li>
-        <li>four of a kind — all four of a rank (also a bomb, see below)</li>
-        <li>
-          run — 3+ cards of consecutive ranks, like 4-5-6. 2s can never be in a
-          run.
-        </li>
-        <li>
-          pair run — 3+ consecutive pairs, like 5-5-6-6-7-7. no 2s here either.
-        </li>
-      </ul>
-
-      <h4 className={styles.tlRulesHeading}>how a trick works</h4>
-      <ul className={styles.tlRulesList}>
-        <li>
-          whoever holds the lowest dealt card leads the very first trick, and
-          that first play must include it.
-        </li>
-        <li>
-          to beat the table you must play the <strong>same combo type and
-          size</strong> with a higher top card — a pair only beats a pair, a
-          5-card run only beats a 5-card run. suit breaks rank ties.
-        </li>
-        <li>
-          can&rsquo;t (or don&rsquo;t want to) beat it? pass — but passing
-          locks you out for the rest of that trick. once everyone else passes,
-          the table clears and the last player to play leads anything they
-          like.
-        </li>
-        <li>you can&rsquo;t pass when you&rsquo;re the one leading.</li>
-      </ul>
-
-      <h4 className={styles.tlRulesHeading}>bombs (chops)</h4>
-      <ul className={styles.tlRulesList}>
-        <li>
-          the one exception to matching the combo type — and your answer to 2s:
-        </li>
-        <li>a 3-pair run chops a single 2</li>
-        <li>four of a kind chops a single 2 or a pair of 2s</li>
-        <li>a pair run of 4+ chops any of those</li>
-        <li>
-          bombs also beat weaker bombs: 3-pair run &lt; four of a kind &lt;
-          4+-pair run
-        </li>
+        <li>3-pair run → beats a single 2</li>
+        <li>four of a kind → beats a 2, a pair of 2s, or a 3-pair run</li>
+        <li>4+ pair run → beats all of the above</li>
       </ul>
 
       <div className={styles.tlRulesFooter}>
