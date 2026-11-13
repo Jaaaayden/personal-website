@@ -124,6 +124,47 @@ describe("renderMarkdown", () => {
   });
 });
 
+describe("review fixes", () => {
+  it("keeps a code span inside a link label", () => {
+    expect(renderInline("[`npm i`](https://x.com)")).toBe(
+      '<a href="https://x.com" target="_blank" rel="noreferrer"><code>npm i</code></a>'
+    );
+    expect(toPlainText("[`x`](/y)")).toBe("x");
+  });
+
+  it("keeps balanced parens in link URLs", () => {
+    expect(renderInline("[wiki](https://en.wikipedia.org/wiki/Foo_(bar))")).toBe(
+      '<a href="https://en.wikipedia.org/wiki/Foo_(bar)" target="_blank" rel="noreferrer">wiki</a>'
+    );
+  });
+
+  it("only lets 1. interrupt a paragraph", () => {
+    expect(renderMarkdown("I was born in\n1999. it was cold")).toBe(
+      "<p>I was born in\n1999. it was cold</p>"
+    );
+    expect(renderMarkdown("steps:\n1. go")).toBe("<p>steps:</p>\n<ol><li>go</li></ol>");
+  });
+
+  it("nests ***bold italic*** correctly", () => {
+    expect(renderInline("***x***")).toBe("<strong><em>x</em></strong>");
+  });
+
+  it("renders indented sub-lists inside their parent item", () => {
+    expect(renderMarkdown("- a\n  - nested\n- b")).toBe(
+      "<ul><li>a<ul><li>nested</li></ul></li><li>b</li></ul>"
+    );
+    expect(renderMarkdown("1. a\n   - x\n   - y\n2. b")).toBe(
+      "<ol><li>a<ul><li>x</li><li>y</li></ul></li><li>b</li></ol>"
+    );
+  });
+
+  it("only closes a code block on a bare fence line", () => {
+    expect(renderMarkdown("```\n```bash is the syntax\nmore\n```\nafter")).toBe(
+      "<pre><code>```bash is the syntax\nmore</code></pre>\n<p>after</p>"
+    );
+  });
+});
+
 describe("toPlainText", () => {
   it("strips markup and decodes entities", () => {
     expect(toPlainText("## hi\n\nsome **bold**, `a < b` & [link](/x)")).toBe(

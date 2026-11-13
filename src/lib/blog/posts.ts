@@ -10,10 +10,13 @@
  *   ---
  *   the body is **markdown**: paragraphs, ## headings, [links](https://x.com),
  *   `code`, ``` blocks, - lists, > quotes.
+ *
+ * Skipped: README.md and files starting with "_" (drafts), e.g. _ideas.md.
  */
 
 import fs from "node:fs";
 import path from "node:path";
+import { cache } from "react";
 import { parseFrontmatter, renderMarkdown, toPlainText } from "./markdown";
 
 export const POSTS_DIR = path.join(process.cwd(), "src", "content", "blog");
@@ -75,15 +78,23 @@ export function sortPosts(posts: Post[]): Post[] {
   );
 }
 
-export function getAllPosts(dir: string = POSTS_DIR): Post[] {
+const isPostFile = (file: string) =>
+  /\.md$/i.test(file) && !file.startsWith("_") && file.toLowerCase() !== "readme.md";
+
+/** Memoized per render pass, so a post page's metadata + body parse once. */
+const loadPosts = cache((dir: string): Post[] => {
   if (!fs.existsSync(dir)) return [];
   const posts = fs
     .readdirSync(dir)
-    .filter((file) => file.endsWith(".md"))
+    .filter(isPostFile)
     .map((file) =>
       parsePost(file.slice(0, -3), fs.readFileSync(path.join(dir, file), "utf8"))
     );
   return sortPosts(posts);
+});
+
+export function getAllPosts(dir: string = POSTS_DIR): Post[] {
+  return loadPosts(dir);
 }
 
 export function getPost(slug: string, dir: string = POSTS_DIR): Post | null {

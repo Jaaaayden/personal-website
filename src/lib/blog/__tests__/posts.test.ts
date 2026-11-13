@@ -69,6 +69,12 @@ describe("getAllPosts / getPost", () => {
     ]);
   });
 
+  it("skips README.md and _drafts instead of failing the build", () => {
+    fs.writeFileSync(path.join(dir, "README.md"), "# how to post");
+    fs.writeFileSync(path.join(dir, "_Draft-Ideas.md"), "half a thought");
+    expect(getAllPosts(dir)).toHaveLength(4);
+  });
+
   it("finds a post by slug, or null", () => {
     expect(getPost("old", dir)?.title).toBe("old");
     expect(getPost("missing", dir)).toBeNull();

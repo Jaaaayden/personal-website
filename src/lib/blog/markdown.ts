@@ -1,7 +1,7 @@
 /**
  * Tiny frontmatter + markdown renderer for blog posts. Supports paragraphs,
  * headings, links, **bold**, *italic*, `inline code`, fenced code blocks,
- * - / 1. lists, > blockquotes and --- rules. Everything else is plain text,
+ * - / 1. lists (indent to nest), > blockquotes and --- rules. Everything else is plain text,
  * and all text is HTML-escaped, so a post can never inject markup.
  */
 
@@ -14,6 +14,16 @@ export function escapeHtml(text: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+/** Inverse of escapeHtml. */
+export function unescapeHtml(text: string): string {
+  return text
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
 }
 
 /** Normalizes line endings and drops a leading BOM. */
@@ -80,14 +90,9 @@ export function renderInline(text: string): string {
   out = escapeHtml(out);
 
   // [text](url) — url was escaped above, which is what an attribute needs.
-  out = out.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (whole, label: string, href: string) => {
-    const decoded = href
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .replace(/&lt;/g, "<")
-      .replace(/&gt;/g, ">")
-      .replace(/&amp;/g, "&");
-    const safe = safeHref(decoded);
+  // URLs may hold one level of balanced parens, e.g. wiki/Foo_(bar).
+  out = out.replace(/\[([^\]]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)/g, (_, label: string, href: string) => {
+    const safe = safeHref(unescapeHtml(href));
     if (safe === null) return formatEmphasis(label);
     const external = /^https?:/i.test(safe);
     const attrs = external ? ' target="_blank" rel="noreferrer"' : "";
@@ -96,14 +101,18 @@ export function renderInline(text: string): string {
 
   out = formatEmphasis(out);
 
-  return out.replace(
-    new RegExp(`${PH_OPEN}(\\d+)${PH_CLOSE}`, "g"),
-    (_, i: string) => stash[Number(i)]
-  );
+  // Stash entries can contain earlier placeholders (code inside a link
+  // label), so restore until none are left.
+  const placeholder = new RegExp(`${PH_OPEN}(\\d+)${PH_CLOSE}`, "g");
+  for (let depth = 0; depth <= stash.length && out.includes(PH_OPEN); depth++) {
+    out = out.replace(placeholder, (_, i: string) => stash[Number(i)]);
+  }
+  return out;
 }
 
 function formatEmphasis(html: string): string {
   return html
+    .replace(/\*\*\*(?=\S)([\s\S]*?\S)\*\*\*/g, "<strong><em>$1</em></strong>")
     .replace(/\*\*(?=\S)([\s\S]*?\S)\*\*/g, "<strong>$1</strong>")
     .replace(/(^|[^\w])__(?=\S)([\s\S]*?\S)__(?!\w)/g, "$1<strong>$2</strong>")
     .replace(/\*(?=\S)([^*]*?\S)\*/g, "<em>$1</em>")
@@ -131,7 +140,9 @@ export function renderMarkdown(source: string): string {
     HEADING.test(line) ||
     RULE.test(line) ||
     BULLET.test(line) ||
-    ORDERED.test(line) ||
+    // Like CommonMark, only "1." starts a list mid-paragraph, so a wrapped
+    // line such as "1999. it was cold" stays prose.
+    ORDERED.exec(line)?.[1] === "1" ||
     QUOTE.test(line);
 
   while (i < lines.length) {
@@ -148,7 +159,9 @@ export function renderMarkdown(source: string): string {
       const lang = fence[2];
       const code: string[] = [];
       i++;
-      while (i < lines.length && !lines[i].trim().startsWith(marker)) {
+      // Closing fence: same character, at least as long, nothing else.
+      const closing = new RegExp(`^\\s*\\${marker[0]}{${marker.length},}\\s*$`);
+      while (i < lines.length && !closing.test(lines[i])) {
         code.push(lines[i]);
         i++;
       }
@@ -182,27 +195,10 @@ export function renderMarkdown(source: string): string {
       continue;
     }
 
-    const ordered = ORDERED.test(line);
-    if (ordered || BULLET.test(line)) {
-      const pattern = ordered ? ORDERED : BULLET;
-      const items: string[] = [];
-      const start = ordered ? Number(ORDERED.exec(line)![1]) : 1;
-      while (i < lines.length) {
-        const m = pattern.exec(lines[i]);
-        if (m) {
-          items.push(ordered ? m[2] : m[1]);
-        } else if (/^\s+\S/.test(lines[i]) && items.length) {
-          // indented continuation of the previous item
-          items[items.length - 1] += ` ${lines[i].trim()}`;
-        } else {
-          break;
-        }
-        i++;
-      }
-      const tag = ordered ? "ol" : "ul";
-      const startAttr = ordered && start !== 1 ? ` start="${start}"` : "";
-      const lis = items.map((item) => `<li>${renderInline(item)}</li>`).join("");
-      html.push(`<${tag}${startAttr}>${lis}</${tag}>`);
+    if (ORDERED.test(line) || BULLET.test(line)) {
+      const parsed = parseList(lines, i);
+      html.push(parsed.html);
+      i = parsed.next;
       continue;
     }
 
@@ -217,16 +213,59 @@ export function renderMarkdown(source: string): string {
   return html.join("\n");
 }
 
+const indentOf = (line: string) => /^ */.exec(line.replace(/\t/g, "    "))![0].length;
+
+/**
+ * Parses a list starting at lines[start]. Lines indented past the marker
+ * belong to the last item: plain text joins its line, and anything from a
+ * nested marker on renders inside the item (e.g. a sub-list).
+ */
+function parseList(lines: string[], start: number): { html: string; next: number } {
+  const first = lines[start];
+  const ordered = ORDERED.test(first);
+  const pattern = ordered ? ORDERED : BULLET;
+  const base = indentOf(first);
+  const items: { text: string; children: string[] }[] = [];
+  let i = start;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const indent = indentOf(line);
+    const m = indent <= base + 1 ? pattern.exec(line) : null;
+    if (m) {
+      items.push({ text: ordered ? m[2] : m[1], children: [] });
+    } else if (!line.trim()) {
+      // A blank line only continues the list if an indented line follows.
+      const next = lines.slice(i + 1).find((l) => l.trim());
+      if (next === undefined || indentOf(next) <= base) break;
+      items.at(-1)!.children.push("");
+    } else if (indent > base && items.length) {
+      const item = items.at(-1)!;
+      const nested = BULLET.test(line) || ORDERED.test(line);
+      if (!item.children.length && !nested) item.text += ` ${line.trim()}`;
+      else item.children.push(line);
+    } else {
+      break;
+    }
+    i++;
+  }
+
+  const lis = items.map(({ text, children }) => {
+    if (!children.length) return `<li>${renderInline(text)}</li>`;
+    const pad = Math.min(...children.filter((l) => l.trim()).map(indentOf));
+    const body = children.map((l) => l.replace(/\t/g, "    ").slice(pad)).join("\n");
+    return `<li>${renderInline(text)}${renderMarkdown(body)}</li>`;
+  });
+  const tag = ordered ? "ol" : "ul";
+  const startNum = ordered ? Number(ORDERED.exec(first)![1]) : 1;
+  const startAttr = startNum !== 1 ? ` start="${startNum}"` : "";
+  return { html: `<${tag}${startAttr}>${lis.join("")}</${tag}>`, next: i };
+}
+
 /** Markdown → plain text, for previews and meta descriptions. */
 export function toPlainText(source: string): string {
-  return renderMarkdown(source)
+  const text = renderMarkdown(source)
     .replace(/<\/?(?:p|h\d|li|ul|ol|blockquote|pre|hr)\b[^>]*>/g, " ")
-    .replace(/<[^>]+>/g, "")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&amp;/g, "&")
-    .replace(/\s+/g, " ")
-    .trim();
+    .replace(/<[^>]+>/g, "");
+  return unescapeHtml(text).replace(/\s+/g, " ").trim();
 }
