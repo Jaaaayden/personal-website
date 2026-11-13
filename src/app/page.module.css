@@ -82,28 +82,15 @@
   letter-spacing: 0.04em;
 }
 
-.fold {
-  display: flex;
-  flex-direction: column;
-  /* Exactly one viewport of content up top (56px = sticky nav), so the games
-     hint sits visible at the bottom edge on landing while the arcade (3rem
-     further down) stays hidden. svh scales with zoom, so this holds at 67%,
-     100%, etc. */
-  min-height: calc(100svh - 56px);
-}
-
+/* Sits under the bio so it's on screen at landing on any viewport. */
 .gamesHint {
-  margin-top: auto;
-  padding: 5rem 0 3.5rem;
-  text-align: center;
-}
-
-.gamesHintLink {
+  display: inline-block;
+  margin-top: 1.75rem;
   font-size: 0.8rem;
   text-decoration: none;
 }
 
-.gamesHintLink:hover {
+.gamesHint:hover {
   color: var(--text);
   text-decoration: none;
 }
