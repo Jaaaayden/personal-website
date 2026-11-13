@@ -1,7 +1,7 @@
 /* ---- section ---- */
 .section {
-  /* breathing room between the work tab and the arcade (the hero's hint links here) */
-  margin-top: 6rem;
+  /* The fold above already pushes this below the viewport; keep a modest gap. */
+  margin-top: 3rem;
   padding-bottom: 4rem;
 }
 

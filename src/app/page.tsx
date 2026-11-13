@@ -8,24 +8,28 @@ import styles from "./page.module.css";
 export default function Home() {
   return (
     <main className={styles.main}>
-      <section className={styles.hero}>
-        <h1 className={styles.heroName}>Jayden Le</h1>
-        <p className={`${styles.heroTagline} text-dim`}>
-          a place for me to yap about software, games, music, and food
-        </p>
+      <div className={styles.fold}>
+        <section className={styles.hero}>
+          <h1 className={styles.heroName}>Jayden Le</h1>
+          <p className={`${styles.heroTagline} text-dim`}>
+            a place for me to yap about software, games, music, and food
+          </p>
+          <Suspense fallback={null}>
+            <HeroBio />
+          </Suspense>
+        </section>
+
         <Suspense fallback={null}>
-          <HeroBio />
+          <Tabs />
           <FrontPageOnly>
-            <a href="#games" className={`${styles.gamesHint} text-dim mono`}>
-              ↓ there are games down here
-            </a>
+            <div className={styles.gamesHint}>
+              <a href="#games" className={`${styles.gamesHintLink} text-dim mono`}>
+                ↓ there are games down here
+              </a>
+            </div>
           </FrontPageOnly>
         </Suspense>
-      </section>
-
-      <Suspense fallback={null}>
-        <Tabs />
-      </Suspense>
+      </div>
 
       <Suspense fallback={null}>
         <FrontPageOnly>
