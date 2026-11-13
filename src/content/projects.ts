@@ -33,8 +33,8 @@ export const PROJECTS: Project[] = [
   },
   {
     name: "PokerNow Tracker",
-    description: "Live PokerNow HUD that tracks every decision as it happens, reveals what your opponent has shown up with in this exact spot, and more!",
-    url: "https://github.com/Jaaaayden/pokernow-tracker",
+    description: "Live PokerNow HUD that shows what your opponent has shown up with in this exact spot.",
+    url: "https://github.com/Jaaaayden/pnt-dist",
     tags: ["Python", "JavaScript", "SQLite"],
   },
   {
