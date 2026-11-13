@@ -1,0 +1,220 @@
+.main {
+  /* 65ch of body text plus the side gutters */
+  max-width: calc(65ch + 2 * clamp(1rem, 4vw, 2.5rem));
+  margin: 0 auto;
+  padding: 4rem clamp(1rem, 4vw, 2.5rem) 8rem;
+}
+
+.header {
+  margin-bottom: 2.25rem;
+}
+
+.header p {
+  margin: 0.4rem 0 0;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+  letter-spacing: -0.02em;
+}
+
+.date {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ---- index ---- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.list li {
+  border-bottom: 1px solid var(--border);
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.95rem 0.75rem;
+  margin: 0 -0.75rem;
+  border-radius: 8px;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.item:hover {
+  text-decoration: none;
+  background: var(--bg-hover);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.itemTitle {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.item:hover .itemTitle {
+  color: var(--accent);
+}
+
+.itemPreview {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 540px) {
+  .item {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}
+
+/* ---- post ---- */
+.back {
+  display: inline-block;
+  margin-bottom: 1.75rem;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+.back:hover {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.postHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.prose {
+  /* same softened body color as the home-page bio */
+  color: color-mix(in srgb, var(--text) 78%, var(--text-dim));
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose pre {
+  margin: 0 0 1.1rem;
+}
+
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--text);
+  margin: 2rem 0 0.6rem;
+}
+
+.prose h2 {
+  font-size: 1.2rem;
+}
+
+.prose h3 {
+  font-size: 1.05rem;
+}
+
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-size: 0.95rem;
+}
+
+.prose strong {
+  color: var(--text);
+}
+
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.35rem;
+}
+
+.prose li + li {
+  margin-top: 0.25rem;
+}
+
+.prose li::marker {
+  color: var(--text-dim);
+}
+
+.prose blockquote {
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 2px solid var(--accent);
+  color: var(--text-dim);
+}
+
+.prose blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.prose code {
+  font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.85em;
+  padding: 0.1em 0.35em;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+.prose pre {
+  padding: 0.9rem 1.1rem;
+  overflow-x: auto;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  line-height: 1.55;
+}
+
+.prose pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}

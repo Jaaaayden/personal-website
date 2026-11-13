@@ -23,6 +23,7 @@ export default function Nav() {
 
   const activeTab =
     pathname === "/" ? (searchParams.get("tab") ?? "work") : null;
+  const onBlog = pathname === "/blog" || pathname.startsWith("/blog/");
 
   return (
     <header className={styles.nav}>
@@ -49,6 +50,16 @@ export default function Nav() {
               </span>
             </Fragment>
           ))}
+          <Link
+            href="/blog"
+            className={`${styles.tab} ${onBlog ? styles.tabActive : ""}`}
+            aria-current={onBlog ? "page" : undefined}
+          >
+            blog
+          </Link>
+          <span className={styles.dot} aria-hidden>
+            ·
+          </span>
           <a
             href={LINKS.resume}
             target="_blank"
