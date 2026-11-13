@@ -15,11 +15,11 @@ export default function BlogIndex() {
     <main className={styles.main}>
       <header className={styles.header}>
         <h1 className={styles.title}>blog</h1>
-        <p className="text-dim">short, random thoughts. newest first.</p>
+        <p className="text-dim">short, random thoughts.</p>
       </header>
 
       {posts.length === 0 ? (
-        <p className="text-dim mono">nothing here yet.</p>
+        <p className="text-dim mono">coming soon.</p>
       ) : (
         <ul className={styles.list}>
           {posts.map((post) => (
