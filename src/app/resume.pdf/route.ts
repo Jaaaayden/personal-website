@@ -76,7 +76,7 @@ export async function GET() {
     return pdfResponse(
       buildPlaceholderPdf([
         "Resume temporarily unavailable",
-        "Please try again shortly, or reach me at jaydenle@g.ucla.edu",
+        "Please try again shortly, or reach me at jaydenle@ucla.edu",
       ]),
       0
     );

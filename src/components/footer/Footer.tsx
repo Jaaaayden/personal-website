@@ -1,6 +1,6 @@
 import styles from "./footer.module.css";
 
-const EMAIL = "jaydenle@g.ucla.edu";
+const EMAIL = "jaydenle@ucla.edu";
 
 export default function Footer() {
   return (
